@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/gridFragment">
 
+    <fragment
+        android:id="@+id/gridFragment"
+        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.GridFragment"
+        android:label="GridFragment"
+        tools:layout="@layout/grid_fragment">
+        <action
+            android:id="@+id/action_gridFragment_to_imagePagerFragment"
+            app:destination="@id/imagePagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imagePagerFragment"
+        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.ImagePagerFragment"
+        android:label="ImagePagerFragment"
+        tools:layout="@layout/image_pager_fragment"/>
 </navigation>
