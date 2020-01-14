@@ -5,9 +5,11 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="4dp"
     app:cardElevation="2dp"
+    android:id="@+id/card_view"
     >
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/grid_image_view"
+        android:transitionName="@string/transition_shared_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"

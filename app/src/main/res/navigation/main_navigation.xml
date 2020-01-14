@@ -18,5 +18,10 @@
         android:id="@+id/imagePagerFragment"
         android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.ImagePagerFragment"
         android:label="ImagePagerFragment"
-        tools:layout="@layout/image_pager_fragment"/>
+        tools:layout="@layout/image_pager_fragment">
+        <argument
+            android:name="img_position"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -1,9 +1,11 @@
 package com.omni.continuoussharedelementtransition_viewpager2.feature
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -35,21 +37,14 @@ class GridAdapter : ListAdapter<ImageData, GridAdapter.GridViewHolder>(DIFF_CALL
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
         getItem(position)?.let {
-            Log.d("onBindViewHolder", it.toString())
-            holder.bind(it)
+            holder.bind(it, position)
         }
     }
 
     class GridViewHolder private constructor(private val rootView: View) :
         RecyclerView.ViewHolder(rootView) {
 
-        init {
-            rootView.setOnClickListener {
-                TODO("do action")
-            }
-        }
-
-        fun bind(item: ImageData) {
+        fun bind(item: ImageData, position: Int) {
             rootView.grid_image_view
                 .let {
                     Glide.with(it.context)
@@ -61,6 +56,24 @@ class GridAdapter : ListAdapter<ImageData, GridAdapter.GridViewHolder>(DIFF_CALL
                         )
                         .into(it)
                 }
+
+            rootView.setOnClickListener {
+                navigateToPager(it,it.grid_image_view , position)
+            }
+        }
+
+        private fun navigateToPager(view: View , imageView: ImageView, position: Int) {
+            val direction =  GridFragmentDirections
+                .actionGridFragmentToImagePagerFragment(position)
+
+            val extras = FragmentNavigatorExtras(
+                imageView to imageView.transitionName
+            )
+
+            view.findNavController().navigate(
+               direction , extras
+            )
+
         }
 
 

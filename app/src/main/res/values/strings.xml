@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Continuous Shared Element Transition-ViewPager2</string>
+    <string name="transition_shared_img" translatable="false">sharedImage</string>
 </resources>
