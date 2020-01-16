@@ -1,4 +1,4 @@
-package com.omni.continuoussharedelementtransition_viewpager2.feature
+package com.omni.continuoussharedelementtransition_viewpager2.feature.pager
 
 //class ImagePagerAdapter(private val IMAGES:Array<ImageData> = ImageData.values()) : RecyclerView.Adapter<PagerViewHolder>() {
 //

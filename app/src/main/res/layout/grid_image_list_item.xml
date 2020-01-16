@@ -9,11 +9,10 @@
     >
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/grid_image_view"
-        android:transitionName="@string/transition_shared_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:cropToPadding="true"
-        android:src="@drawable/pic_two"
-        app:srcCompat="@drawable/pic_five" />
+        android:transitionName="@string/transition_shared_img"
+         />
 </com.google.android.material.card.MaterialCardView>

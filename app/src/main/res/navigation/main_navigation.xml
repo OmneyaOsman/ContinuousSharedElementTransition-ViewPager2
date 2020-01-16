@@ -7,21 +7,29 @@
 
     <fragment
         android:id="@+id/gridFragment"
-        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.GridFragment"
+        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.grid.GridFragment"
         android:label="GridFragment"
         tools:layout="@layout/grid_fragment">
         <action
             android:id="@+id/action_gridFragment_to_imagePagerFragment"
-            app:destination="@id/imagePagerFragment" />
+            app:destination="@id/imagePagerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/imagePagerFragment"
-        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.ImagePagerFragment"
+        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.pager.ImagePagerFragment"
         android:label="ImagePagerFragment"
         tools:layout="@layout/image_pager_fragment">
         <argument
-            android:name="img_position"
-            android:defaultValue="0"
-            app:argType="integer" />
+            android:name="img_resource"
+            app:argType="integer"
+            />
+        <argument
+            android:name="img_id"
+            app:argType="integer"
+            />
     </fragment>
 </navigation>

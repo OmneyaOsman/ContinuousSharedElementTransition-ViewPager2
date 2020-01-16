@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.omni.continuoussharedelementtransition_viewpager2.R
+import com.omni.continuoussharedelementtransition_viewpager2.feature.grid.GridFragmentDirections
 import kotlinx.android.synthetic.main.grid_image_list_item.view.*
 
 class GridAdapter : ListAdapter<ImageData, GridAdapter.GridViewHolder>(DIFF_CALLBACK) {
@@ -26,10 +27,6 @@ class GridAdapter : ListAdapter<ImageData, GridAdapter.GridViewHolder>(DIFF_CALL
         }
     }
 
-    init {
-        submitList(DataGenerator.list)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         GridViewHolder.from(
             parent
@@ -37,43 +34,43 @@ class GridAdapter : ListAdapter<ImageData, GridAdapter.GridViewHolder>(DIFF_CALL
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
         getItem(position)?.let {
-            holder.bind(it, position)
+            holder.bind(it)
         }
     }
 
     class GridViewHolder private constructor(private val rootView: View) :
         RecyclerView.ViewHolder(rootView) {
 
-        fun bind(item: ImageData, position: Int) {
-            rootView.grid_image_view
-                .let {
-                    Glide.with(it.context)
-                        .load(item.imageResource)
-                        .apply(
-                            RequestOptions()
-                                .placeholder(R.drawable.loading_animation)
-                                .error(R.drawable.ic_broken_image)
-                        )
-                        .into(it)
-                }
+        fun bind(item: ImageData) {
+            with(rootView.findViewById<ImageView>(R.id.grid_image_view))
+            {
+                transitionName = "${resources.getString(R.string.transition_shared_img)}_${item.id}"
+                Glide.with(context)
+                    .load(item.imageResource)
+                    .apply(
+                        RequestOptions().dontTransform()
+                            .placeholder(R.drawable.loading_animation)
+                            .error(R.drawable.ic_broken_image)
+                    )
+                    .into(this)
+            }
 
             rootView.setOnClickListener {
-                navigateToPager(it,it.grid_image_view , position)
+                navigateToPager(it, it.grid_image_view, item)
             }
         }
 
-        private fun navigateToPager(view: View , imageView: ImageView, position: Int) {
-            val direction =  GridFragmentDirections
-                .actionGridFragmentToImagePagerFragment(position)
+        private fun navigateToPager(view: View, imageView: ImageView, imageData: ImageData) {
+            val direction = GridFragmentDirections
+                .actionGridFragmentToImagePagerFragment(imageData.imageResource, imageData.id)
 
             val extras = FragmentNavigatorExtras(
-                imageView to imageView.transitionName
-            )
+                imageView to "${view.resources.getString(R.string.transition_shared_img)}_${imageData.id}"
 
+            )
             view.findNavController().navigate(
-               direction , extras
+                direction, extras
             )
-
         }
 
 

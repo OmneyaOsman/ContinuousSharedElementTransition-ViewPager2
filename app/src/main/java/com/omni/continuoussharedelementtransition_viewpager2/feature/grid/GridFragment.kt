@@ -1,4 +1,4 @@
-package com.omni.continuoussharedelementtransition_viewpager2.feature
+package com.omni.continuoussharedelementtransition_viewpager2.feature.grid
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.omni.continuoussharedelementtransition_viewpager2.R
+import com.omni.continuoussharedelementtransition_viewpager2.feature.DataGenerator
+import com.omni.continuoussharedelementtransition_viewpager2.feature.GridAdapter
+import com.omni.continuoussharedelementtransition_viewpager2.feature.waitForTransition
 import kotlinx.android.synthetic.main.grid_fragment.view.*
 
 class GridFragment : Fragment() {
 
-    lateinit var rootView: View
+    private lateinit var rootView: View
+    private lateinit var gridAdapter: GridAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,9 +28,12 @@ class GridFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(rootView.grid_recycler_view) {
-            adapter =
-                GridAdapter()
+            gridAdapter = GridAdapter()
+            adapter = gridAdapter
+            gridAdapter.submitList(DataGenerator.list)
+            waitForTransition(this)
 
         }
+
     }
 }
