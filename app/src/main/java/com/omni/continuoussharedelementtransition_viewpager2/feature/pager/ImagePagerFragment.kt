@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.navigation.fragment.navArgs
@@ -12,8 +12,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.ChangeClipBounds
 import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import androidx.viewpager2.widget.ViewPager2
 import com.omni.continuoussharedelementtransition_viewpager2.R
 
 class ImagePagerFragment : Fragment() {
@@ -32,22 +31,22 @@ class ImagePagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.pager_image_list_item, container, false)
+        val rootView = inflater.inflate(R.layout.image_pager_fragment, container, false)
+        val imagePosition = args.imgId - 1
+        postponeEnterTransition()
 
-        rootView.findViewById<ImageView>(R.id.pager_imageView_item).run {
-            transitionName = "${resources.getString(R.string.transition_shared_img)}_${args.imgId}"
+        with(rootView.findViewById<ViewPager2>(R.id.image_pager))
+        {
+            adapter = ImagePagerAdapter { position ->
+                if (position == imagePosition) {
+                    startPostponedEnterTransition()
+                }
+            }
 
-            Glide.with(requireContext())
-                .load(args.imgResource)
-                .apply(
-
-                    RequestOptions().dontTransform()
-                        .placeholder(R.drawable.loading_animation)
-                        .error(R.drawable.ic_broken_image)
-                )
-                .into(this)
+            doOnPreDraw {
+                setCurrentItem(imagePosition, false)
+            }
         }
-
         return rootView
     }
 
