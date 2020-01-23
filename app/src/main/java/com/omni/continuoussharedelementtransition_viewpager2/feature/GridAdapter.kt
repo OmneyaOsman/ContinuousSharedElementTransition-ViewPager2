@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
 import com.bumptech.glide.request.RequestOptions
 import com.omni.continuoussharedelementtransition_viewpager2.R
 import com.omni.continuoussharedelementtransition_viewpager2.feature.grid.GridFragmentDirections
@@ -51,7 +52,7 @@ class GridAdapter : ListAdapter<ImageData, GridAdapter.GridViewHolder>(DIFF_CALL
                         RequestOptions().dontTransform()
                             .placeholder(R.drawable.loading_animation)
                             .error(R.drawable.ic_broken_image)
-                    )
+                    ).priority(Priority.IMMEDIATE)
                     .into(this)
             }
 
