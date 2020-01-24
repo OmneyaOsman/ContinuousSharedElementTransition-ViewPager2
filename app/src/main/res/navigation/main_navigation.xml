@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/gridFragment"
-        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.grid.GridFragment"
+        android:name="com.omni.continuoussharedelementtransition_viewpager2.grid.GridFragment"
         android:label="GridFragment"
         tools:layout="@layout/grid_fragment">
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/imagePagerFragment"
-        android:name="com.omni.continuoussharedelementtransition_viewpager2.feature.pager.ImagePagerFragment"
+        android:name="com.omni.continuoussharedelementtransition_viewpager2.pager.ImagePagerFragment"
         android:label="ImagePagerFragment"
         tools:layout="@layout/image_pager_fragment">
         <argument
