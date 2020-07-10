@@ -8,16 +8,15 @@ import android.widget.LinearLayout
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.transition.Fade
-import androidx.transition.TransitionSet
-import com.omni.continuoussharedelementtransition_viewpager2.DataGenerator
-import com.omni.continuoussharedelementtransition_viewpager2.R
-import com.omni.continuoussharedelementtransition_viewpager2.SharedViewModel
-import com.omni.continuoussharedelementtransition_viewpager2.waitForTransition
+import com.omni.continuoussharedelementtransition_viewpager2.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class GridFragment : Fragment() {
 
@@ -39,10 +38,11 @@ class GridFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(recyclerView) {
-            layoutManager = StaggeredGridLayoutManager( 2 ,LinearLayout.VERTICAL)
+            layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
             adapter = GridAdapter().apply {
                 submitList(DataGenerator.list)
             }
+            addItemDecoration(DividerItemDecoration(requireContext() ,LinearLayout.VERTICAL))
             exitTransition = exitTransition()
             setExitSharedElementCallback(sharedElementCallback)
             waitForTransition(this)
@@ -56,14 +56,6 @@ class GridFragment : Fragment() {
      *  the shared view and adjust the transition to handle cases where the view is changed
      *  after paging the images.*/
 
-    private fun exitTransition() = TransitionSet()
-        .addTransition(Fade().addTarget(R.id.card_view))
-        .apply {
-            duration = 375
-            startDelay = 25
-            interpolator = FastOutSlowInInterpolator()
-        }
-
 
     private val sharedElementCallback = object : SharedElementCallback() {
         override fun onMapSharedElements(
@@ -71,22 +63,41 @@ class GridFragment : Fragment() {
             sharedElements: MutableMap<String, View>
         ) {
 
-
             viewModel.currentPositionLiveData.observe(viewLifecycleOwner, Observer { current ->
 
-                with(recyclerView) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                     //  Map the first shared element name to the child ImageView.
+                    withContext(Dispatchers.Main) {
+                        recyclerView.findViewHolderForAdapterPosition(current) //  Map the first shared element name to the child ImageView.
+                            ?.let {
+                                sharedElements.put(
+                                    names[0],
+                                    it.itemView.findViewById(R.id.grid_image_view)
+                                )
+                            }
 
-                    recyclerView.findViewHolderForAdapterPosition(current) //  Map the first shared element name to the child ImageView.
-                        ?.let {
-                            sharedElements.put(
-                                names[0],
-                                it.itemView.findViewById(R.id.grid_image_view)
-                            )
-                        }
-                    post {
-                        layoutManager?.scrollToPosition(current)
+                        recyclerView.smoothScrollToItemPosition(current)
+                        recyclerView.awaitScrollEnd()
                     }
+//                    recyclerView.run {
+//
+//                        //                        adapter?.awaitItemIdExists(current.toLong())
+//                        val seasonItemPosition: Int? = adapter?.findItemIdPosition(current.toLong())
+//                        seasonItemPosition?.let {
+//                            this.smoothScrollToItemPosition(it)
+//                        }
+//
+//                        this.awaitScrollEnd()
+//
+//                    }
                 }
+//                with(recyclerView) {
+//
+
+//                    post {
+//                        layoutManager?.scrollToPosition(current)
+//                    }
+//                }
             })
 
         }

@@ -9,16 +9,12 @@ import androidx.core.app.SharedElementCallback
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import androidx.transition.ChangeBounds
-import androidx.transition.ChangeClipBounds
-import androidx.transition.ChangeTransform
-import androidx.transition.TransitionSet
 import androidx.viewpager2.widget.ViewPager2
 import com.omni.continuoussharedelementtransition_viewpager2.R
 import com.omni.continuoussharedelementtransition_viewpager2.SharedViewModel
+import com.omni.continuoussharedelementtransition_viewpager2.enterTransition
 
 class ImagePagerFragment : Fragment() {
 
@@ -29,7 +25,7 @@ class ImagePagerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = setSharedImageTransition()
+        sharedElementEnterTransition = enterTransition()
     }
 
     override fun onCreateView(
@@ -75,15 +71,6 @@ class ImagePagerFragment : Fragment() {
         }
     }
 
-    private fun setSharedImageTransition() = TransitionSet()
-        .addTransition(ChangeClipBounds())
-        .addTransition(ChangeTransform())
-        .addTransition(ChangeBounds())
-        .apply {
-            duration = 500
-            ordering = TransitionSet.ORDERING_TOGETHER
-            interpolator = FastOutSlowInInterpolator()
-        }
 
     override fun onDestroyView() {
         super.onDestroyView()
